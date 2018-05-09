@@ -102,7 +102,7 @@ public class AdMobOverlap implements PluginDelegate {
 	protected String interstitialAdUnit;
 	protected String rewardedVideoAdUnit;
 	protected boolean isOverlap;
-	protected boolean isTest;
+	protected boolean isTest = false;
 	//
 	protected String bannerPreviousPosition;	
 	protected String bannerPreviousSize;
@@ -129,7 +129,7 @@ public class AdMobOverlap implements PluginDelegate {
 		this.interstitialAdUnit = interstitialAdUnit;
 		this.rewardedVideoAdUnit = rewardedVideoAdUnit;		
 		this.isOverlap = isOverlap;
-		this.isTest = isTest;			
+		this.isTest = false;			
 		
 		lastOrientation = -1;		
 		handleLayoutChangeOverlap();
