@@ -260,7 +260,7 @@ public class AdMobOverlap implements PluginDelegate {
 		}
 			
 		//https://developer.android.com/reference/com/google/android/gms/ads/AdRequest.Builder.html
-		AdRequest.Builder builder = new AdRequest.Builder()
+		AdRequest.Builder builder = new AdRequest.Builder();
 		builder.tagForChildDirectedTreatment(true);
 		if(isTest) {
 			builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR); 
@@ -420,7 +420,7 @@ public class AdMobOverlap implements PluginDelegate {
 			interstitial.setAdListener(new MyInterstitialListener());					
 		}		
 		
-		AdRequest.Builder builder = new AdRequest.Builder()
+		AdRequest.Builder builder = new AdRequest.Builder();
 		builder.tagForChildDirectedTreatment(true);
 		
 		if(isTest) {
@@ -460,7 +460,7 @@ public class AdMobOverlap implements PluginDelegate {
 			rewardedVideo.setRewardedVideoAdListener(new MyRewardedVideoListener());	
 		}		
 		
-		AdRequest.Builder builder = new AdRequest.Builder()
+		AdRequest.Builder builder = new AdRequest.Builder();
 		builder.tagForChildDirectedTreatment(true);
 		
 		if(isTest) {
