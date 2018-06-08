@@ -21,9 +21,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
-import com.google.android.gms.ads.reward.RewardItem;
+
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +98,7 @@ public class AdMobOverlap implements PluginDelegate {
 	//
 	protected String bannerAdUnit;
 	protected String interstitialAdUnit;
-	protected String rewardedVideoAdUnit;
+
 	protected boolean isOverlap;
 	protected boolean isTest = false;
 	//
@@ -110,12 +108,12 @@ public class AdMobOverlap implements PluginDelegate {
 	//
 	protected boolean bannerAdPreload;	
 	protected boolean interstitialAdPreload;
-	protected boolean rewardedVideoAdPreload;	
+		
 	//admob
 	protected RelativeLayout bannerViewLayout;
 	protected AdView bannerView;
 	protected InterstitialAd interstitial;
-	protected RewardedVideoAd rewardedVideo;
+
 	
 	public AdMobOverlap(Plugin plugin_) {
 		plugin = plugin_;
@@ -124,10 +122,10 @@ public class AdMobOverlap implements PluginDelegate {
 	public void _setLicenseKey(String email, String licenseKey) {
 	}
 	
-	public void _setUp(String bannerAdUnit, String interstitialAdUnit, String rewardedVideoAdUnit, boolean isOverlap, boolean isTest) {
+	public void _setUp(String bannerAdUnit, String interstitialAdUnit, boolean isOverlap, boolean isTest) {
 		this.bannerAdUnit = bannerAdUnit;
 		this.interstitialAdUnit = interstitialAdUnit;
-		this.rewardedVideoAdUnit = rewardedVideoAdUnit;		
+			
 		this.isOverlap = isOverlap;
 		this.isTest = false;			
 		
@@ -445,45 +443,7 @@ public class AdMobOverlap implements PluginDelegate {
 		}		
 	}
     
-	public void _preloadRewardedVideoAd() {
-		rewardedVideoAdPreload = true;
 
-		loadRewardedVideoAd();
-	}
-	
-	public void loadRewardedVideoAd() {
-		if (rewardedVideo == null) {
-			//rewardedVideo = new RewardedVideoAd(plugin.getCordova().getActivity());
-			rewardedVideo = MobileAds.getRewardedVideoAdInstance(plugin.getCordova().getActivity());
-			//
-			//rewardedVideo.setAdUnitId(this.rewardedVideoAdUnit);
-			rewardedVideo.setRewardedVideoAdListener(new MyRewardedVideoListener());	
-		}		
-		
-		AdRequest.Builder builder = new AdRequest.Builder();
-		builder.tagForChildDirectedTreatment(true);
-		
-		if(isTest) {
-			builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR); 
-			//builder.addTestDevice("INSERT_YOUR_HASHED_DEVICE_ID_HERE");				
-			String ANDROID_ID = Settings.Secure.getString(plugin.getCordova().getActivity().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-			String deviceId = Util.md5(ANDROID_ID).toUpperCase();
-			builder.addTestDevice(deviceId);		
-		}
-		AdRequest request = builder.build();			
-		rewardedVideo.loadAd(this.rewardedVideoAdUnit, request);		
-	}
-	
-	public void _showRewardedVideoAd() {
-		if(rewardedVideoAdPreload) {
-			rewardedVideoAdPreload = false;
-
-			rewardedVideo.show();
-		}
-		else {
-			loadRewardedVideoAd();
-		}		
-	}
 	
    //http://developer.android.com/reference/com/google/android/gms/ads/AdListener.html
     class MyBannerViewListener extends AdListener {
@@ -577,91 +537,6 @@ public class AdMobOverlap implements PluginDelegate {
     		//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);    		
     	}
     }
-
-	class MyRewardedVideoListener implements RewardedVideoAdListener {
-		
-		@Override
-		public void onRewardedVideoAdFailedToLoad(int errorCode) {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoAdFailedToLoad"));
-		}
-
-		@Override
-		public void onRewardedVideoAdLoaded() {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoAdLoaded"));
-		  
-    		if(rewardedVideoAdPreload) {
-    			PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdPreloaded");
-    			pr.setKeepCallback(true);
-    			plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-    			//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
-    			//pr.setKeepCallback(true);
-    			//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-    		}
-    		
-    		PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdLoaded");
-    		pr.setKeepCallback(true);
-    		plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-    		//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
-    		//pr.setKeepCallback(true);
-    		//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);		
-    		
-    		if(!rewardedVideoAdPreload) {
-				rewardedVideo.show();
-    		}		  
-		}
-
-		@Override
-		public void onRewardedVideoAdOpened() {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoAdOpened"));
-		}
-
-		@Override
-		public void onRewardedVideoStarted() {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoStarted"));
-		  
-    		PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdShown");
-    		pr.setKeepCallback(true);
-    		plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-    		//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
-    		//pr.setKeepCallback(true);
-    		//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);		  
-		}
-
-		@Override
-		public void onRewardedVideoAdClosed() {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoAdClosed"));
-		  
-    		PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdHidden");
-    		pr.setKeepCallback(true);
-    		plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-    		//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
-    		//pr.setKeepCallback(true);
-    		//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);		  
-		}
-
-		@Override
-		public void onRewardedVideoAdLeftApplication() {
-			Log.d(LOG_TAG, String.format("%s", "onRewardedVideoAdLeftApplication"));
-		}
-		
-		@Override
-		public void onRewarded(RewardItem reward) {
-			Log.d(LOG_TAG, String.format("%s", "onRewarded"));
-		  
-/*
-      String obj = __getProductShortName();
-      String json = String.format("{'adNetwork':'%s','adType':'%s','adEvent':'%s','rewardType':'%s','rewardAmount':%d}",
-              obj, ADTYPE_REWARDVIDEO, EVENT_AD_PRESENT, reward.getType(), reward.getAmount());
-*/			  
-		  
-			PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdCompleted");
-			pr.setKeepCallback(true);
-			plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
-			//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
-			//pr.setKeepCallback(true);
-			//callbackContextKeepCallback.sendPluginResult(pr);				  
-		}	
-	}
 	
     public void onPause(boolean multitasking) {
 		if (bannerView != null) {
