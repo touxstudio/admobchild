@@ -654,13 +654,13 @@ public class AdMobOverlap implements PluginDelegate {
               obj, ADTYPE_REWARDVIDEO, EVENT_AD_PRESENT, reward.getType(), reward.getAmount());
 */			  
 		  
-			PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdCompleted");
-			pr.setKeepCallback(true);
-			plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
+			//PluginResult pr = new PluginResult(PluginResult.Status.OK, "onRewardedVideoAdCompleted");
+			//pr.setKeepCallback(true);
+			//plugin.getCallbackContextKeepCallback().sendPluginResult(pr);
 			//PluginResult pr = new PluginResult(PluginResult.Status.ERROR);
 			//pr.setKeepCallback(true);
 			//callbackContextKeepCallback.sendPluginResult(pr);				  
-		}	
+		/*}	
 	} */
 	
     public void onPause(boolean multitasking) {
